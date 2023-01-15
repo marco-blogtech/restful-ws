@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
@@ -23,14 +24,18 @@ public class User {
     @Id // Primary Key of our entity
     @GeneratedValue // Used to generate simple primary keys
     private Integer id;
+
+    @NotNull
     @Size(min=2, message = "Name should have at least 2 characters") // Validation
     @JsonProperty("user_name") // name should be written as user_name in our json
     private String name;
 
+    @NotNull
     @Size(min=8, message = "Password should have at least 8 characters") // Validation
     @JsonProperty("user_pass") // password should be written as user_pass in our json
     private String password;
 
+    @NotNull
     @Past(message = "Birth Date should be in the past")  // Validation - your BirthDate can not be in the future.
     @JsonProperty("birth_date") // birthDate should be written as birth_date in our json
     private LocalDate birthDate;
@@ -44,11 +49,12 @@ public class User {
     protected User() {
     }
 
-    public User(Integer id, String name, String password, LocalDate birthDate) {
+    public User(Integer id, String name, String password, LocalDate birthDate, List<Post> posts) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.birthDate = birthDate;
+        this.posts = posts;
     }
 
     // SETTERS AND GETTERS
@@ -102,6 +108,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", birthDate=" + birthDate +
+                ", posts=" + posts +
                 '}';
     }
 
