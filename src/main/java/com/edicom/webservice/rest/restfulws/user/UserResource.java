@@ -112,6 +112,8 @@ public class UserResource {
             //Return 201 Status Code with location=uriToResource
             return ResponseEntity.created(location).build();
         }else{
+            //We must set ID
+            updateUser.setId(id);
             //We update the user and get its id
             userRepository.save(updateUser);
             //We must return 200 OK
