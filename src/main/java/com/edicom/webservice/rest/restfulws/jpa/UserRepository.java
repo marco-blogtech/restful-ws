@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 //User repository for our social media Users.
 public interface UserRepository extends JpaRepository<User, Integer> {
+
 }

@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,6 +30,7 @@ public class User {
     @Size(min=8, message = "Password should have at least 8 characters") // Validation
     @JsonProperty("user_pass") // password should be written as user_pass in our json
     private String password;
+
     @Past(message = "Birth Date should be in the past")  // Validation - your BirthDate can not be in the future.
     @JsonProperty("birth_date") // birthDate should be written as birth_date in our json
     private LocalDate birthDate;
@@ -101,5 +103,20 @@ public class User {
                 ", password='" + password + '\'' +
                 ", birthDate=" + birthDate +
                 '}';
+    }
+
+    // Utilities
+
+    public User mergeUser(User patchUser){
+        if(patchUser==null){
+            return this;
+        }
+        if(!StringUtils.equals(this.name, patchUser.getName())){
+            this.name = patchUser.getName();
+        }
+        if(!this.birthDate.equals(patchUser.getBirthDate())){
+            this.birthDate = patchUser.getBirthDate();
+        }
+        return this;
     }
 }

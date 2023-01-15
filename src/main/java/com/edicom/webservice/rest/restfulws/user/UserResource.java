@@ -47,7 +47,7 @@ public class UserResource {
         return mappingJacksonValue;
     }
 
-    //Get a specific user
+    //Get a specific user by Id
     @GetMapping("/users/{id}")
     public MappingJacksonValue retrieveUser(@PathVariable int id){
         //We find a user
@@ -87,8 +87,54 @@ public class UserResource {
     //Delete a user
     @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable int id){
+        Optional<User> user = userRepository.findById(id);
+
+        //If optional is empty, UserNotFoundException
+        if (user.isEmpty()){
+            throw new UserNotFoundException("User not found - id:"+id);
+        }
         //Delete user
         userRepository.deleteById(id);
+    }
+
+    //Bulk edit one user
+    @PutMapping("/users/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable int id, @Valid @RequestBody User updateUser){
+        //We find a user
+        Optional<User> user = userRepository.findById(id);
+
+        //If optional is empty, we create it and return 201
+        if (user.isEmpty()){
+            //We save the user and get its id
+            User savedUser = userRepository.save(updateUser);
+            //Get the uri to the resource
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();
+            //Return 201 Status Code with location=uriToResource
+            return ResponseEntity.created(location).build();
+        }else{
+            //We update the user and get its id
+            userRepository.save(updateUser);
+            //We must return 200 OK
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    //Partial edit one user
+    @PatchMapping("/users/{id}")
+    public ResponseEntity<User> patchUser(@PathVariable int id, @Valid @RequestBody User updateUser){
+        //We find a user
+        Optional<User> user = userRepository.findById(id);
+
+        //If optional is empty, UserNotFoundException
+        if (user.isEmpty()){
+            throw new UserNotFoundException("User not found - id:"+id);
+        }else{
+            User mergedUser = user.get().mergeUser(updateUser);
+            //We update the user and get its id
+            userRepository.save(mergedUser);
+            //We must return 200 OK
+            return ResponseEntity.ok().build();
+        }
     }
 
     // Methods for Post
