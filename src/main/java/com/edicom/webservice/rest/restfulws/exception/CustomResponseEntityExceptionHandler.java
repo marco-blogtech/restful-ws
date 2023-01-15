@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
+    //This handles all exceptions except the ones we have specified below
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ErrorDetails> handleAllExceptions(Exception ex, WebRequest request) throws Exception {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
@@ -27,12 +28,14 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 
     }
 
+    //We treat in a special way when the user is not found.
     @ExceptionHandler(UserNotFoundException.class)
     public final ResponseEntity<ErrorDetails> handleUserNotFoundException(Exception ex, WebRequest request) throws Exception {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+    //We override this method when the arguments are not valid to show all errors.
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         String message = "Total Errors: " + ex.getFieldErrors().size();

@@ -2,7 +2,7 @@ package com.edicom.webservice.rest.restfulws.exception;
 
 import java.time.LocalDateTime;
 
-//Esta es la estructura en la que queremos que se escriban nuestras excepciones
+//Custom structure for Exception in a request
 public class ErrorDetails {
 
     private LocalDateTime timeStamp;

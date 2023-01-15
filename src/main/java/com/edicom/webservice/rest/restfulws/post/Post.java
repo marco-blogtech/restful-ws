@@ -5,19 +5,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
+//POJO for our social media Post
 @Entity
 public class Post {
 
-    @Id
-    @GeneratedValue
+    @Id // Primary Key of our entity
+    @GeneratedValue // Used to generate simple primary keys
     private Integer id;
 
-    @Size(min=1, message = "Post content should have at least 1 character")
+    @Size(min=1, message = "Post content should have at least 1 character") // Validation
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY) // Fetchtype = LAZY We only load on demand
+    @JsonIgnore // We do not want user in our json
     private User user;
+
+    // CONSTRUCTORS
 
     protected Post() {
     }
@@ -26,6 +29,8 @@ public class Post {
         this.id = id;
         this.content = content;
     }
+
+    // SETTERS AND GETTERS
 
     public Integer getId() {
         return id;
@@ -50,6 +55,8 @@ public class Post {
     public void setUser(User user) {
         this.user = user;
     }
+
+    // TO STRING
 
     @Override
     public String toString() {

@@ -14,27 +14,33 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity(name = "user_details")
-@JsonFilter("userFilter")
+//POJO for our social media User
+@Entity(name = "user_details") //In JPA there is a USER so we rename to user_details
+@JsonFilter("userFilter") //Filter name for User
 public class User {
 
-    @Id
-    @GeneratedValue
+    @Id // Primary Key of our entity
+    @GeneratedValue // Used to generate simple primary keys
     private Integer id;
-    @Size(min=2, message = "Name should have at least 2 characters")
-    @JsonProperty("user_name")
+    @Size(min=2, message = "Name should have at least 2 characters") // Validation
+    @JsonProperty("user_name") // name should be written as user_name in our json
     private String name;
 
-    @Size(min=8, message = "Password should have at least 8 characters")
-    @JsonProperty("user_password")
+    @Size(min=8, message = "Password should have at least 8 characters") // Validation
+    @JsonProperty("user_pass") // password should be written as user_pass in our json
     private String password;
-    @Past(message = "Birth Date should be in the past")
-    @JsonProperty("birth_date")
+    @Past(message = "Birth Date should be in the past")  // Validation - your BirthDate can not be in the future.
+    @JsonProperty("birth_date") // birthDate should be written as birth_date in our json
     private LocalDate birthDate;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
+    @OneToMany(mappedBy = "user") // A user has more than 1 post
+    @JsonIgnore // Posts should not be retreived with user
     private List<Post> posts;
+
+    // CONSTRUCTORS
+
+    protected User() {
+    }
 
     public User(Integer id, String name, String password, LocalDate birthDate) {
         this.id = id;
@@ -43,8 +49,7 @@ public class User {
         this.birthDate = birthDate;
     }
 
-    protected User() {
-    }
+    // SETTERS AND GETTERS
 
     public Integer getId() {
         return id;
@@ -85,6 +90,8 @@ public class User {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
+
+    // TO STRING
 
     @Override
     public String toString() {
