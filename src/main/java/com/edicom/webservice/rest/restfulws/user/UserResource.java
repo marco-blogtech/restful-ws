@@ -41,7 +41,7 @@ public class UserResource {
         //First we find all users and create a MappingJacksonValue
         MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(userRepository.findAll());
         //We do not want to return user password or posts, so we only return id, user_name and birth_date
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id","user_name","birth_date");
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id","user_name","birth_date","posts");
         FilterProvider filters = new SimpleFilterProvider().addFilter("userFilter", filter);
         mappingJacksonValue.setFilters(filters);
         return mappingJacksonValue;
@@ -67,7 +67,7 @@ public class UserResource {
 
         //Again filter the user
         MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(entityModel);
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id","user_name","birth_date");
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id","user_name","birth_date","posts");
         FilterProvider filters = new SimpleFilterProvider().addFilter("userFilter", filter);
         mappingJacksonValue.setFilters(filters);
         return mappingJacksonValue;
